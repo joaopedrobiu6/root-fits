@@ -93,12 +93,12 @@ void GraphMaker(std::vector<std::vector<float>> data, const char *title, const c
     gr.SetMarkerSize(1);
     gr.SetMarkerStyle(8);
 
-    TF1 *f = new TF1("func", expr, x[0], x[data.size()]);
+    /* TF1 *f = new TF1("func", expr, x[0], x[data.size()]);
     f->SetLineColor(kRed + 1);
     f->SetLineWidth(2);
 
     gr.Fit(f);
-    std::cout << "ChiSquared: " << f->GetChisquare() << std::endl;
+    std::cout << "ChiSquared: " << f->GetChisquare() << std::endl; */
 
     c.Update();
     gr.Draw(draw);

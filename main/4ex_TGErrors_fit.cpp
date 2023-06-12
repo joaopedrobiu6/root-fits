@@ -4,6 +4,8 @@
 #include "TCanvas.h"
 #include "TF1.h"
 #include "TAxis.h"
+#include "TApplication.h"
+#include "TRootCanvas.h"
 
 int main()
 {
@@ -12,7 +14,6 @@ int main()
     auto data = DataImport.GetData();
 
     // Criar CANVAS
-    TCanvas c("canvas", "grafico", 200, 10, 1920, 1080);
     gStyle->SetOptFit(kTRUE);
 
     // Colocar dados no TGraph
@@ -42,6 +43,14 @@ int main()
     Se for criado assim, para aceder aos elemento do objeto utiliza-se um "." ao invés de "->"
     */
 
+    // Criar uma janela da aplicação
+    TApplication app("app", NULL, NULL);
+    // Criar o canvas onde será desenhado o gráfico
+    TCanvas *c = new TCanvas("canvas", "grafico", 200, 10, 1920, 1080);
+
+    TRootCanvas *r = (TRootCanvas *)c->GetCanvasImp();
+    r->Connect("CloseWindow()", "TApplication", gApplication, "Terminate()");
+
     gr->SetTitle("4ex Gaussiana");                            // Dar título ao gráfico
     gr->GetXaxis()->SetTitle("#theta (^{o})");                // Título do eixo X
     gr->GetYaxis()->SetTitle("N^{o} de Coincid#hat{e}ncias"); // Título do eixo Y
@@ -52,17 +61,15 @@ int main()
     gr->SetMarkerSize(1.2);
     gr->SetMarkerStyle(8);
 
-    TF1 *f = new TF1("function_to_fit", "gaus(0)", -10, 10);
+    /* TF1 *f = new TF1("function_to_fit", "gaus(0)", -10, 10);
     f->SetLineColor(kRed + 1);
     f->SetLineWidth(2);
 
-    gr->Fit(f, "R");
+    gr->Fit(f, "R"); */
 
-    c.Update();
+    c->Update();
     gr->Draw("AP");
-    c.SaveAs("ex4.png");
-
-    delete gr;
+    app.Run("true");
 
     return 0;
 }
